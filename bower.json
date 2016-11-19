@@ -3,7 +3,13 @@
   "description": "Register anamnesis for people presentig with pain",
   "main": "pain-history.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.2",
+    "paper-listbox": "PolymerElements/paper-listbox#^1.1.2",
+    "paper-item": "PolymerElements/paper-item#^1.2.1",
+    "paper-card": "PolymerElements/paper-card#^1.1.4",
+    "vaadin-combo-box": "^1.1.5",
+    "paper-tags": "PolymerEl/paper-tags#^1.0.6"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
