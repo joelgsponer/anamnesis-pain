@@ -1,0 +1,85 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-styles/color.html">
+
+<!--
+`pain-history`
+Register anamnesis for people presentig with pain
+
+@demo demo/index.html
+-->
+
+<dom-module id="pain-history">
+  <template>
+    <style>
+      .not-asked{
+        color: var(--paper-blue-grey-50);
+        background: var(--paper-blue-grey-500);
+      }
+      .not-present{
+        color: var(--paper-indigo-50);
+        background: var(--paper-indigo-500);
+      }
+      .present{
+        color: var(--paper-purple-50);
+        background: var(--paper-purple-500);
+      }
+    </style>
+    <paper-button id="buttonPain" on-tap="toggle" class="computeClass()">Pain</paper-button>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'pain-history',
+
+      properties: {
+        debug: Boolean,
+        pain:{
+          type: String,
+          value: "not-asked",
+          reflectToAttribute: true,
+          notify: true,
+          observer: "_painChanged"
+        },
+        quality: {
+          type: String,
+          reflectToAttribute: true,
+          notify: true
+        },
+      },
+      ready: function() {
+        console.log(this.debug);
+        if(this.debug){console.log(this.pain)};
+      },
+      toggle: function() {
+        if(this.debug){console.log("Value Pain:" + this.pain)};
+        if(this.debug){console.log("button-pain toggeled")};
+        if(this.pain=="not-asked"){
+          if(this.debug){console.log("pain equals not-asked")}
+          this.pain = "not-present";
+          if(this.debug){console.log(this.pain)};
+          return(this.pain)
+        };
+        if(this.pain=="not-present"){
+          if(this.debug){console.log("pain equals not-present")}
+          this.pain = "present";
+          if(this.debug){console.log(this.pain)};
+          return(this.pain)
+        };
+        if(this.pain=="present"){
+          if(this.debug){console.log("pain equals present")}
+          this.pain = "not-asked";
+          if(this.debug){console.log(this.pain)};
+          return(this.pain);
+        };
+      },
+      _painChanged: function(newValue, oldValue) {
+        if(this.debug){console.log("Compute class:" + this.pain)};
+        this.$.buttonPain.toggleClass(oldValue);
+        this.$.buttonPain.toggleClass(newValue);
+      },
+
+    });
+  </script>
+</dom-module>
