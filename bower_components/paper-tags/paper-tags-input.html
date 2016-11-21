@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 An element for settings tags tags, based on paper-input
 
-### Example: 
+### Example:
 
     <paper-tags-input label="input label" show-counter="tags" items='["hello", "new"]'  maxLength="10"></paper-tags-input>
 
@@ -24,7 +24,7 @@ The following custom properties and mixins are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--paper-tag-margin`   | bottom margin for tags | 3px        
+`--paper-tag-margin`   | bottom margin for tags | 3px
 
 @element paper-tags-input
 @demo demo/index.html
@@ -36,17 +36,17 @@ Custom property | Description | Default
       display: block;
       --paper-tag-margin: 3px;
     }
-    
+
     paper-input {
       --paper-input-container-input: {
         margin-bottom: var(--paper-tag-margin);
       }
     }
-    
+
     paper-tags {
       max-width: 80%;
     }
-    
+
     paper-tags[readonly] {
       opacity: 0.6;
     }
@@ -55,7 +55,7 @@ Custom property | Description | Default
       display: inline-block;
       position: inherit;
     }
-    
+
     .paper-tags-counter {
       display: inline-block;
     }

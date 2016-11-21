@@ -7,7 +7,9 @@
 <link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../paper-tags/paper-tags-input.html">
-
+<link rel="import" href="../paper-slider/paper-slider.html">
+<link rel="import" href="../paper-typeahead-input/paper-typeahead-input.html">
+<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
 
 
 <!--
@@ -15,6 +17,13 @@
 Register anamnesis for people presentig with pain
 
 @demo demo/index.html
+
+toDo:
+- Theming
+- Typeahead
+- Slider
+- Tests
+- Output
 -->
 
 <dom-module id="pain-history">
@@ -25,17 +34,17 @@ Register anamnesis for people presentig with pain
         --paper-tag-focus-color: var(--paper-purple-50);
       }
 
-      paper-button.not-asked{
+      .not-asked{
         color: var(--paper-blue-grey-50);
         background: var(--paper-blue-grey-500);
       }
 
-      paper-button.not-present{
+      .not-present{
         color: var(--paper-indigo-50);
         background: var(--paper-indigo-500);
       }
 
-      paper-button.present{
+      .present{
         color: var(--paper-purple-50);
         background: var(--paper-purple-500);
       }
@@ -44,7 +53,13 @@ Register anamnesis for people presentig with pain
     <paper-card hidden$="{{_computeHidden(pain)}}">
       <div class="card-content">
         <!-- <vaadin-combo-box label="Quality" class="languages" items="[[qualities]]" id="dropdownQuality"></vaadin-combo-box> -->
-        <paper-tags-input label="Quality" items='[[qualities]]'  maxLength="10"></paper-tags-input>
+        <paper-tags-input label="Quality" items='[[qualities_selected]]'  maxLength="10"></paper-tags-input>
+        <paper-slider min="0" max="10" value="0" label="Intensity" editable pin></paper-slider>
+        <iron-a11y-keys id="a11y" target="[[target]]" keys="enter"
+                    on-keys-pressed="onEnter"></iron-a11y-keys>
+        <paper-typeahead-input id="tagInput" label="Quality" local-candidates="{{qualities}}"
+          placeholder="Please enter value" max-suggestions="4" value="{{userInput::input}}">
+        </paper-typeahead-input>
       </div>
       <div class="card-actions"></div>
     </paper-card>
@@ -74,11 +89,31 @@ Register anamnesis for people presentig with pain
           type: String,
           value: ["stinging", "burning"]
         },
+        qualities_selected:{
+          type: String,
+          value: [],
+          observer: "_qualities_selectedChanged"
+        },
+        userInput: {
+            type: String,
+            notify: true,
+        },
+        target: {
+          type: Object,
+          value: function() {
+            return this.$.tagInput;
+          }
+        },
       },
       ready: function() {
         console.log(this.debug);
         if(this.debug){console.log(this.pain)};
         return(this.pain = "not-asked");
+      },
+      onEnter: function() {
+        console.log(this.userInput);
+        this.qualities_selected.push(this.userInput);
+        console.log(this.qualities_selected);
       },
       toggle: function() {
         if(this.debug){console.log("Value Pain:" + this.pain)};
@@ -106,6 +141,9 @@ Register anamnesis for people presentig with pain
       },
       _computeHidden: function(){
         return(!(this.pain === "present"));
+      },
+      _qualities_selectedChanged: function(){
+        console.log(this.qualities_selected)
       }
 
     });
