@@ -20,8 +20,6 @@ Register anamnesis for people presentig with pain
 
 toDo:
 - Theming
-- Typeahead
-- Slider
 - Tests
 - Output
 -->
@@ -52,11 +50,12 @@ toDo:
     <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
     <paper-card hidden$="{{_computeHidden(pain)}}">
       <div class="card-content">
-        <iron-a11y-keys id="a11y" target="[[target]]" keys="enter"
-                    on-keys-pressed="onEnter"></iron-a11y-keys>
-        <!-- <paper-typeahead-input id="tagInput" label="Quality" local-candidates="{{qualities}}"
-          placeholder="Please enter value" max-suggestions="4" value="{{userInput::input}}">
-        </paper-typeahead-input> -->
+        <iron-a11y-keys
+          id="a11y"
+          target="[[target]]"
+          keys="enter"
+          on-keys-pressed="onEnter"
+        ></iron-a11y-keys>
         <vaadin-combo-box
           id="tagInput"
           label="Quality"
@@ -64,8 +63,19 @@ toDo:
           items="[[qualities]]"
           allow-custom-value = true
         ></vaadin-combo-box>
-        <paper-tags-input label="Quality" items='{{qualities_selected}}'></paper-tags-input>
-        <paper-slider min="0" max="10" value="0" label="Intensity" edi =table pin></paper-slider>
+        <paper-tags-input
+          id="tagStorage"
+          items='{{qualities_selected}}'
+        ></paper-tags-input>
+        <paper-slider
+          id="intensityInput"
+          min="0"
+          max="10"
+          value="0"
+          label="Intensity"
+          editable
+          pin
+        ></paper-slider>
       </div>
       <div class="card-actions"></div>
     </paper-card>
@@ -78,32 +88,31 @@ toDo:
       is: 'pain-history',
 
       properties: {
-        debug: Boolean,
+        // attribute to turn debug on or off.
+        debug:{
+          type: Boolean,
+          reflectToAttribute: true
+        },
+        // is there pain present?
         pain:{
           type: String,
           reflectToAttribute: true,
-          // value: "not-asked",
           notify: true,
+          value:"not-asked",
           observer: "_painChanged"
         },
-        quality: {
-          type: String,
-          reflectToAttribute: true,
-          notify: true
-        },
+        // pain qualities provided for choosing.
         qualities:{
           type: String,
           value: ["stinging", "burning"]
         },
+        // the qualities that are selected and should be returned.
         qualities_selected:{
           type: Array,
           value: function(){return([])},
           notify: true,
         },
-        userInput: {
-            type: String,
-            notify: true,
-        },
+        // target to bind enter keydown thorugh a11y to combo box.
         target: {
           type: Object,
           value: function() {
@@ -111,50 +120,50 @@ toDo:
           }
         },
       },
-      observer:[
-        "_qualities_selectedChanged(qualities_selected.*,0)"
-      ],
       ready: function() {
-        console.log(this.debug);
-        if(this.debug){console.log(this.pain)};
-        return(this.pain = "not-asked");
+        if(this.debug){console.log("#ready-debug:"+this.debug)};
+        if(this.debug){console.log("#ready-pain:"+this.pain)};
       },
+      // on enter adds the current value of the combo box to the selected pain qualities.
       onEnter: function() {
-        console.log(this.$.tagInput.value);
+        if(this.debug){console.log("#onEnter-tagInput.value:"+this.$.tagInput.value)};
+        if(this.debug){console.log("#onEnter-qualities_selected:"+this.qualities_selected)};
         this.unshift("qualities_selected",this.$.tagInput.value);
+        if(this.debug){console.log("#onEnter-qualities_selected:"+this.qualities_selected)};
         this.$.tagInput.value = "";
+        if(this.debug){console.log("#onEnter-tagInput.value:"+this.$.tagInput.value)};
       },
+      // toggle let's the user cycle through the differnt stages of pain, either not aked, not present or present, in which case additional information can be provided through the undhidden form.
       toggle: function() {
-        if(this.debug){console.log("Value Pain:" + this.pain)};
-        if(this.debug){console.log("#button-pain toggeled")};
+        if(this.debug){console.log("#toggle-pain:" + this.pain)};
         if(this.pain=="not-asked"){
           this.pain = "not-present";
-          if(this.debug){console.log("-pain:"+this.pain)};
+          if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain, this._hidden)
         };
         if(this.pain=="not-present"){
           this.pain = "present";
-          if(this.debug){console.log("-pain:"+this.pain)};
+          if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain)
         };
         if(this.pain=="present"){
           this.pain = "not-asked";
-          if(this.debug){console.log("-pain:"+this.pain)};
+          if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain);
         };
       },
+      // _painChanged updates the css class of buttonPain depending on the pain value, necessary for computing hiddden
       _painChanged: function(newValue, oldValue) {
-        if(this.debug){console.log("#Compute class:" + this.pain)};
+        if(this.debug){console.log("#_painChanged-pain:" + this.pain)};
         this.$.buttonPain.toggleClass(oldValue);
         this.$.buttonPain.toggleClass(newValue);
       },
+      // If pain is present additional information should be provided through the now unhidden form
       _computeHidden: function(){
-        return(!(this.pain === "present"));
-      },
-      _qualities_selectedChanged: function(changeRecord,index){
-        console.log(this.qualities_selected);
+        _hidden = !(this.pain === "present")
+        if(this.debug){console.log("#_computeHidden-_hidden:"+_hidden)};
+        return(_hidden);
       }
-
     });
   </script>
 </dom-module>
