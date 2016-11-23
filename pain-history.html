@@ -52,14 +52,20 @@ toDo:
     <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
     <paper-card hidden$="{{_computeHidden(pain)}}">
       <div class="card-content">
-        <!-- <vaadin-combo-box label="Quality" class="languages" items="[[qualities]]" id="dropdownQuality"></vaadin-combo-box> -->
-        <paper-tags-input label="Quality" items='[[qualities_selected]]'  maxLength="10"></paper-tags-input>
-        <paper-slider min="0" max="10" value="0" label="Intensity" editable pin></paper-slider>
         <iron-a11y-keys id="a11y" target="[[target]]" keys="enter"
                     on-keys-pressed="onEnter"></iron-a11y-keys>
-        <paper-typeahead-input id="tagInput" label="Quality" local-candidates="{{qualities}}"
+        <!-- <paper-typeahead-input id="tagInput" label="Quality" local-candidates="{{qualities}}"
           placeholder="Please enter value" max-suggestions="4" value="{{userInput::input}}">
-        </paper-typeahead-input>
+        </paper-typeahead-input> -->
+        <vaadin-combo-box
+          id="tagInput"
+          label="Quality"
+          class="languages"
+          items="[[qualities]]"
+          allow-custom-value = true
+        ></vaadin-combo-box>
+        <paper-tags-input label="Quality" items='{{qualities_selected}}'></paper-tags-input>
+        <paper-slider min="0" max="10" value="0" label="Intensity" edi =table pin></paper-slider>
       </div>
       <div class="card-actions"></div>
     </paper-card>
@@ -90,9 +96,9 @@ toDo:
           value: ["stinging", "burning"]
         },
         qualities_selected:{
-          type: String,
-          value: [],
-          observer: "_qualities_selectedChanged"
+          type: Array,
+          value: function(){return([])},
+          notify: true,
         },
         userInput: {
             type: String,
@@ -105,15 +111,18 @@ toDo:
           }
         },
       },
+      observer:[
+        "_qualities_selectedChanged(qualities_selected.*,0)"
+      ],
       ready: function() {
         console.log(this.debug);
         if(this.debug){console.log(this.pain)};
         return(this.pain = "not-asked");
       },
       onEnter: function() {
-        console.log(this.userInput);
-        this.qualities_selected.push(this.userInput);
-        console.log(this.qualities_selected);
+        console.log(this.$.tagInput.value);
+        this.unshift("qualities_selected",this.$.tagInput.value);
+        this.$.tagInput.value = "";
       },
       toggle: function() {
         if(this.debug){console.log("Value Pain:" + this.pain)};
@@ -142,8 +151,8 @@ toDo:
       _computeHidden: function(){
         return(!(this.pain === "present"));
       },
-      _qualities_selectedChanged: function(){
-        console.log(this.qualities_selected)
+      _qualities_selectedChanged: function(changeRecord,index){
+        console.log(this.qualities_selected);
       }
 
     });
