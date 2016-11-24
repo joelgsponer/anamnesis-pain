@@ -1,17 +1,15 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../iron-form/iron-form.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-card/paper-card.html">
 <link rel="import" href="../paper-styles/color.html">
-<link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../paper-tags/paper-tags-input.html">
 <link rel="import" href="../paper-slider/paper-slider.html">
-<link rel="import" href="../paper-typeahead-input/paper-typeahead-input.html">
-<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
-
-
+<link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
 <!--
 `pain-history`
 Register anamnesis for people presentig with pain
@@ -33,7 +31,7 @@ toDo:
       }
 
       .not-asked{
-        color: var(--paper-blue-grey-50);
+        color: var(--history-button-text-color,--paper-blue-grey-50);
         background: var(--paper-blue-grey-500);
       }
 
@@ -49,35 +47,39 @@ toDo:
     </style>
     <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
     <paper-card hidden$="{{_computeHidden(pain)}}">
-      <div class="card-content">
-        <iron-a11y-keys
-          id="a11y"
-          target="[[target]]"
-          keys="enter"
-          on-keys-pressed="onEnter"
-        ></iron-a11y-keys>
-        <vaadin-combo-box
-          id="tagInput"
-          label="Quality"
-          class="languages"
-          items="[[qualities]]"
-          allow-custom-value = true
-        ></vaadin-combo-box>
-        <paper-tags-input
-          id="tagStorage"
-          items='{{qualities_selected}}'
-        ></paper-tags-input>
-        <paper-slider
-          id="intensityInput"
-          min="0"
-          max="10"
-          value="0"
-          label="Intensity"
-          editable
-          pin
-        ></paper-slider>
-      </div>
-      <div class="card-actions"></div>
+      <form id="form" method="get" action="http://httpbin.org/get">
+          <div class="card-content">
+            <iron-a11y-keys
+              id="a11y"
+              target="[[target]]"
+              keys="enter"
+              on-keys-pressed="onEnter"
+            ></iron-a11y-keys>
+            <vaadin-combo-box
+              id="tagInput"
+              label="Quality"
+              class="languages"
+              items="[[qualities]]"
+              allow-custom-value = true
+            ></vaadin-combo-box>
+            <paper-tags-input
+              id="tagStorage"
+              items='{{qualities_selected}}'
+            ></paper-tags-input>
+            <paper-slider
+              id="intensityInput"
+              min="0"
+              max="10"
+              value="0"
+              label="Intensity"
+              editable
+              pin
+            ></paper-slider>
+          </div>
+          <div class="card-actions"></div>
+          <input name="pain" value="[[pain]]" hidden>
+          <paper-button on-tap="submitForm">Submit</paper-button>
+      </from>
     </paper-card>
 
   </template>
@@ -151,6 +153,9 @@ toDo:
           if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain);
         };
+      },
+      submitForm: function(){
+        this.$.form.submit();
       },
       // _painChanged updates the css class of buttonPain depending on the pain value, necessary for computing hiddden
       _painChanged: function(newValue, oldValue) {
