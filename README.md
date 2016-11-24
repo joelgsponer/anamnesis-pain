@@ -1,4 +1,4 @@
-# \<pain-history\>
+# \<anamnesis-pain\>
 
 Register anamnesis for people presentig with pain
 

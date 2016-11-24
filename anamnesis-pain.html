@@ -11,7 +11,7 @@
 <link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
 <!--
-`pain-history`
+`anamnesis-pain`
 Register anamnesis for people presentig with pain
 
 @demo demo/index.html
@@ -22,17 +22,18 @@ toDo:
 - Output
 -->
 
-<dom-module id="pain-history">
+<dom-module id="anamnesis-pain">
   <template>
     <style>
       :host {
+        display: inline-block;
         --paper-tag-text-color: var(--paper-purple-500);
         --paper-tag-focus-color: var(--paper-purple-50);
       }
 
       .not-asked{
         color: var(--history-button-text-color,--paper-blue-grey-50);
-        background: var(--paper-blue-grey-500);
+        background: var(--history-button-background-color,--paper-blue-grey-500);
       }
 
       .not-present{
@@ -43,6 +44,11 @@ toDo:
       .present{
         color: var(--paper-purple-50);
         background: var(--paper-purple-500);
+      }
+
+      paper-card{
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
       }
     </style>
     <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
@@ -87,7 +93,7 @@ toDo:
   <script>
     Polymer({
 
-      is: 'pain-history',
+      is: 'anamnesis-pain',
 
       properties: {
         // attribute to turn debug on or off.

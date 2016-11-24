@@ -4,25 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>pain-history test</title>
+    <title>anamnesis-pain test</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../pain-history.html">
+    <link rel="import" href="../anamnesis-pain.html">
   </head>
   <body>
     <test-fixture id="basic">
       <template>
-        <pain-history></pain-history>
+        <anamnesis-pain></anamnesis-pain>
       </template>
     </test-fixture>
 
     <script>
-      suite('pain-history', function() {
+      suite('anamnesis-pain', function() {
         test('instantiating the element works', function() {
           var element = fixture('basic');
-          assert.equal(element.is, 'pain-history');
+          assert.equal(element.is, 'anamnesis-pain');
         });
       });
     </script>

@@ -1,7 +1,7 @@
 {
-  "name": "pain-history",
+  "name": "anamnesis-pain",
   "description": "Register anamnesis for people presentig with pain",
-  "main": "pain-history.html",
+  "main": "anamnesis-pain.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.2",
