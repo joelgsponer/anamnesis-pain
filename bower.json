@@ -11,7 +11,8 @@
     "vaadin-combo-box": "^1.1.5",
     "paper-tags": "PolymerEl/paper-tags#^1.0.6",
     "paper-slider": "PolymerElements/paper-slider#^1.0.12",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "toggle-icon": "fxedel/toggle-icon#^1.1.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
