@@ -1,6 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
 <link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
@@ -24,14 +27,35 @@ toDo:
 -->
 
 <dom-module id="anamnesis-pain">
-  <template>
     <style>
-      :host {
-        display: inline-block;
-        --paper-tag-text-color: var(--paper-purple-500);
-        --paper-tag-focus-color: var(--paper-purple-50);
+      .heading {
+        padding: 10px 15px;
+        margin-top: 20px;
+        margin-left: 5px;
+        margin-right: 5px;
+        background-color: #f3f3f3;
+        border: 1px solid #dedede;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        text-align: left;
       }
-
+      .collapse{
+        margin-bottom: 20px;
+        margin-left: 6px;
+        margin-right: -4px;
+      }
+      .content {
+        border: 1px solid #dedede;
+        border-top: none;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        padding: 10px;
+        @apply(--shadow-elevation-2dp);
+      }
       .not-asked{
         color: var(--history-button-text-color,--paper-blue-grey-50);
         background: var(--history-button-background-color,--paper-blue-grey-500);
@@ -46,45 +70,53 @@ toDo:
         color: var(--paper-purple-50);
         background: var(--paper-purple-500);
       }
-
     </style>
-    <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
-    <paper-card hidden$="{{_computeHidden(pain)}}">
-      <form id="form" method="get" action="http://httpbin.org/get">
-          <div class="card-content">
-            <iron-a11y-keys
-              id="a11y"
-              target="[[target]]"
-              keys="enter"
-              on-keys-pressed="onEnter"
-            ></iron-a11y-keys>
-            <vaadin-combo-box
-              id="tagInput"
-              label="Quality"
-              class="languages"
-              items="[[qualities]]"
-              allow-custom-value = true
-            ></vaadin-combo-box>
-            <paper-tags-input
-              id="tagStorage"
-              items='{{qualities_selected}}'
-            ></paper-tags-input>
-            <paper-slider
-              id="intensityInput"
-              min="0"
-              max="10"
-              value="0"
-              label="Intensity"
-              editable
-              pin
-            ></paper-slider>
-          </div>
-          <div class="card-actions"></div>
-          <input name="pain" value="[[pain]]" hidden>
-          <paper-button on-tap="submitForm">Submit</paper-button>
-      </from>
-    </paper-card>
-
+    <style include="iron-flex iron-flex-alignment"></style>
+  <template>
+    <div>
+    <paper-button id="buttonPain" on-tap="toggle" class="heading">
+      <span class="layout horizontal"><iron-icon icon="check"></iron-icon></span>
+      <span class="layout flex" style="text-align:center;">Pain</span>
+      <span class="layout horizontal"><iron-icon icon="arrow-drop-down"></iron-icon></span>
+    </paper-button>
+    <iron-collapse  id="collapse" tabindex="0" class="collapse">
+      <div class="content">
+        <div>
+          <form id="form" method="get" action="http://httpbin.org/get">
+                <iron-a11y-keys
+                  id="a11y"
+                  target="[[target]]"
+                  keys="enter"
+                  on-keys-pressed="onEnter"
+                ></iron-a11y-keys>
+                <vaadin-combo-box
+                  id="tagInput"
+                  label="Quality"
+                  class="languages"
+                  items="[[qualities]]"
+                  allow-custom-value = true
+                ></vaadin-combo-box>
+                <paper-tags-input
+                  id="tagStorage"
+                  items='{{qualities_selected}}'
+                ></paper-tags-input>
+                <paper-slider
+                  id="intensityInput"
+                  min="0"
+                  max="10"
+                  value="0"
+                  label="Intensity"
+                  editable
+                  pin
+                ></paper-slider>
+              <div class="card-actions"></div>
+              <input name="pain" value="[[pain]]" hidden>
+              <paper-button on-tap="submitForm">Submit</paper-button>
+          </from>
+        </div>
+      </div>
+    </iron-collapse>
+  </div>
   </template>
 
   <script>
@@ -148,11 +180,13 @@ toDo:
         };
         if(this.pain=="not-present"){
           this.pain = "present";
+          this.$.collapse.toggle();
           if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain)
         };
         if(this.pain=="present"){
           this.pain = "not-asked";
+          this.$.collapse.toggle();
           if(this.debug){console.log("#toggle-pain:"+this.pain)};
           return(this.pain);
         };
@@ -170,6 +204,7 @@ toDo:
       _computeHidden: function(){
         _hidden = !(this.pain === "present")
         if(this.debug){console.log("#_computeHidden-_hidden:"+_hidden)};
+        if(_hidden){this.$.collapse.toggle()};
         return(_hidden);
       }
     });
