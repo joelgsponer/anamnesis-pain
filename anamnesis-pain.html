@@ -17,7 +17,8 @@ Register anamnesis for people presentig with pain
 @demo demo/index.html
 
 toDo:
-- Theming
+- Internationalization
+- Theming, partly done
 - Tests
 - Output
 -->
@@ -46,10 +47,6 @@ toDo:
         background: var(--paper-purple-500);
       }
 
-      paper-card{
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-      }
     </style>
     <paper-button id="buttonPain" on-tap="toggle">Pain</paper-button>
     <paper-card hidden$="{{_computeHidden(pain)}}">
